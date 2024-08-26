@@ -12,10 +12,13 @@ routes.get('/', (request, response) => {
     return response.status(200).json({ name, description, version })
 });
 
+routes.get('/habits', habbitsController.index);
+
 routes.post('/habits', habbitsController.store);
 
+routes.delete('/habits/:id', habbitsController.remove);
 
-
+routes.patch('/habits/:id/toggle', habbitsController.toggle);
 
 /**
  * M (Model) => Responsável por se comunicar com o banco;
