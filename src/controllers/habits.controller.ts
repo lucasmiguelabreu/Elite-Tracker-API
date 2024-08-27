@@ -86,25 +86,50 @@ export class HabbitsController {
             return response.status(422).json({ message: errors });
         };
 
-        const findhabit = await habitModel.findOne({
+        const findHabit = await habitModel.findOne({
             _id: validated.data.id,
         });
 
-        if (!findhabit) {
+        if (!findHabit) {
             return response.status(422).json({ message: 'Habit not found' });
         }
 
         const now = dayjs().startOf('day').toISOString();
 
-        const isHabitCompletedOnDate = findhabit.completedDates?.toObject().find((item) => String(item) === now);
+        const isHabitCompletedOnDate = findHabit.toObject()?.completedDates.find((item) => dayjs(String(item)).toISOString() === now);
 
         console.log(isHabitCompletedOnDate)
 
         if (isHabitCompletedOnDate) {
-            return response.json({ message: 'completed' })
+            const habitUpdated = await habitModel.findOneAndUpdate({
+                _id: validated.data.id,
+            }, 
+            {
+                $pull: {
+                    completedDates: now,
+                }
+            },
+            {
+                returnDocument: 'after'
+            })
+
+
+            return response.status(200).json(habitUpdated);
         }
 
-        return response.json({ message: 'Not completed' })
+        const habitUpdated = await habitModel.findOneAndUpdate({
+            _id: validated.data.id,
+        }, 
+        {
+            $push: {
+                completedDates: now,
+            }
+        },
+        {
+            returnDocument: 'after'
+        })
+
+        return response.status(200).json(habitUpdated)
     }
 }
 
