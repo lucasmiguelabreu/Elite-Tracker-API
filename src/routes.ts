@@ -1,10 +1,13 @@
 import { Router } from 'express';
 import packageJson from '../package.json';
 import { HabbitsController } from './controllers/habits.controller';
+import { FocusTimeController } from './controllers/focus-time.controller';
 
 export const routes = Router();
 
 const habbitsController = new HabbitsController();
+const focusTimeController = new FocusTimeController
+
 
 routes.get('/', (request, response) => {
     const { name, description, version } = packageJson;
@@ -19,6 +22,17 @@ routes.post('/habits', habbitsController.store);
 routes.delete('/habits/:id', habbitsController.remove);
 
 routes.patch('/habits/:id/toggle', habbitsController.toggle);
+
+
+routes.post('/focus-time', focusTimeController.store)
+
+
+
+
+
+
+
+
 
 /**
  * M (Model) => Responsável por se comunicar com o banco;

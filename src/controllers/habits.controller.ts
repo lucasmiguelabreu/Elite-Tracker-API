@@ -98,8 +98,6 @@ export class HabbitsController {
 
         const isHabitCompletedOnDate = findHabit.toObject()?.completedDates.find((item) => dayjs(String(item)).toISOString() === now);
 
-        console.log(isHabitCompletedOnDate)
-
         if (isHabitCompletedOnDate) {
             const habitUpdated = await habitModel.findOneAndUpdate({
                 _id: validated.data.id,
